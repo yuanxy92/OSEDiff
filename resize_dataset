@@ -1,0 +1,49 @@
+import os
+from PIL import Image
+
+def resize_images(input_dir, output_dir, size):
+    """
+    Resize all images in the input directory to the given size and save them to the output directory.
+
+    :param input_dir: Path to the input directory containing images.
+    :param output_dir: Path to the output directory to save resized images.
+    :param size: Tuple of (width, height) for the resized images.
+    """
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    valid_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff'}
+
+    num = 0
+    for filename in os.listdir(input_dir):
+        input_path = os.path.join(input_dir, filename)
+        
+        # Check file extension
+        if not any(filename.lower().endswith(ext) for ext in valid_extensions):
+            print(f"Skipping {filename}: Invalid file extension")
+            continue
+
+        # Check if it's a valid image file
+        try:
+            with Image.open(input_path) as img:
+                # Resize image
+                img_resized = img.resize(size)
+
+                # Save to the output directory
+                output_path = os.path.join(output_dir, filename)
+                img_resized.save(output_path)
+                # print(f"Saved resized image to {output_path}")
+        except Exception as e:
+            print(f"Skipping {filename}: {e}")
+
+        num = num + 1
+        if num % 1000 == 1:
+            print(f"Finished image {num}")
+
+
+# Example usage
+input_directory = "E:/Data/Metalens/MetalensSR_20241220/lr_SwinIR"  # Replace with your input path
+output_directory = "E:/Data/Metalens/MetalensSR_20241220/lr_SwinIR_100/"  # Replace with your output path
+resize_to = (100, 100)  # Replace with desired size (width, height)
+
+resize_images(input_directory, output_directory, resize_to)
