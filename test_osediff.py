@@ -111,6 +111,9 @@ if __name__ == "__main__":
 
         # get caption
         validation_prompt, lq = get_validation_prompt(args, input_image, DAPE)
+
+        # validation_prompt = 'photo, real, ' + validation_prompt
+
         if args.save_prompts:
             txt_save_path = f"{txt_path}/{bname.split('.')[0]}.txt"
             with open(txt_save_path, 'w', encoding='utf-8') as f:
@@ -132,5 +135,7 @@ if __name__ == "__main__":
             if resize_flag:
                 output_pil.resize((int(args.upscale*ori_width), int(args.upscale*ori_height)))
 
+        base_name2 = bname.rsplit('.', 1)[0]
+        bname = f"{base_name2}.jpg"
         output_pil.save(os.path.join(args.output_dir, bname))
 
